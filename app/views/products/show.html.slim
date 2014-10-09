@@ -1,0 +1,18 @@
+div class="row"
+  table 
+    thead 
+     tr
+           th style="width: 80px;"
+           th style="text-align:center;width: 100px;" Name
+           th style="text-align:center;width: 100px;" Version
+     tbody
+       - @repo_total.each do |product|
+            tr data-id=product.id
+             td style="text-align:center;width: 100px;" = product.name
+             td style="text-align:center;width: 100px;" = product.version
+             td style="text-align:center;width: 100px;" = product.bugzilla_status
+             td style="text-align:center;width: 100px;" = product.bugzilla_url
+             td style="text-align:center;width: 100px;" = product.status
+             td style="text-align:center;width: 100px;" = product.release_date
+             td style="text-align:center;width: 100px;" = product.description
+             td style="text-align:center;width: 100px;" = product.deleted

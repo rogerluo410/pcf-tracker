@@ -1,0 +1,30 @@
+localcommon: &localcommon
+  adapter: postgresql
+  encoding: unicode
+  username: postgres  
+
+# config for postgres
+common: &common
+  adapter: postgresql
+  encoding: unicode
+  username: postgres
+
+test:
+  <<: *localcommon
+  template: template0
+  database: pcf_test
+
+#NOTE: postgres
+development:
+  <<: *common
+  template: template0
+  database: pcf_development
+
+ci:
+   <<: *common
+   template: template0
+   database: pcf_ci
+
+production:
+  <<: *common
+  database: pcf_production

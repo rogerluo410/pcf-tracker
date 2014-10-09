@@ -1,0 +1,531 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Scotzilla-Tracker System</title>
+   <link rel="stylesheet" type="text/css" href="stylesheets/themes/default/easyui.css">
+   <link rel="stylesheet" type="text/css" href="stylesheets/themes/icon.css">
+<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" />
+<script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
+
+    <script src="javascripts/jquery-1.6.min.js" type="text/javascript"></script>
+    <script src="javascripts/jquery.easyui.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="javascripts/highcharts.js"></script>
+    <script type="text/javascript" src="javascripts/exporting.js"></script>
+	
+    <script src="Default.js" type="text/javascript"></script>
+    <style type="text/css">
+        .easyui-accordion ul
+        {
+            list-style-type: none;
+            margin: 0px;
+            padding: 10px;
+        }
+        .easyui-accordion ul li
+        {
+            padding: 0px;
+        }
+        .easyui-accordion ul li a
+        {
+            line-height: 24px;
+        }
+        .easyui-accordion ul li div
+        {
+            margin: 2px 0px;
+            padding-left: 10px;
+            padding-top: 2px;
+        }
+        .easyui-accordion ul li div.hover
+        {
+            border: 1px dashed #99BBE8;
+            background: #E0ECFF;
+            cursor: pointer;
+        }
+        .easyui-accordion ul li div.hover a
+        {
+            color: #416AA3;
+        }
+        .easyui-accordion ul li div.selected
+        {
+            border: 1px solid #99BBE8;
+            background: #E0ECFF;
+            cursor: default;
+        }
+        .easyui-accordion ul li div.selected a
+        {
+            color: #416AA3;
+            font-weight: bold;
+        }
+        .panel-tool-close
+        {
+           display:none !important;
+        } 
+
+
+
+    </style>
+</head>
+<body  style=" margin:0pxauto;text-align:center;" >
+    <noscript>
+        <div style="position: absolute; z-index: 100000; height: 2046px; top: 0px; left: 0px;width: 100%; background: white; text-align: center;">
+            <img src="images/noscript.gif" alt='Please Enable JavaScript support' />
+        </div>
+    </noscript>
+    <div region="north" split="true" style="overflow: hidden; height: 30px; background: #D2E0F2 repeat-x center 50%;line-height: 20px; color: #fff;">
+         Scotzilla-Tracker Web App 
+    </div>
+    <div region="south" style="height: 20px; background: #D2E0F2;">
+    </div>
+    <div region="west" split="true" title="PCF products list" style="width: 190px;padding:3px;  text-align:left " >
+    <button onclick="add_product()" style="width: 150px;"> Create New Product </Button>
+         <ul id="tt" class="easyui-tree" style='padding-left: 0px; padding-right: 0px; padding-top: 0px;'  ></ul>
+    </div>
+
+    <div region="center" id="mainPanle" style="background: #eee;overflow:hidden;">
+        <div id="tabs" class="easyui-tabs" fit="true" border="false">
+            <div title="product page" style="padding: 20px;" id="home">
+             
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <div id="update-Ts-window" title="Update Tickets ID" style="width: 350px; height: 220px;">
+            <div style="padding: 20px 20px 40px 80px;" >
+                <form method="post">
+                    <table>
+                     <tr>
+                       <td id="ts_package_td_id">
+                          Package ID
+                       </td>
+                            <td>
+                                <input name="params[:package_id]" style="width: 250px;display:'none';" id="ts_package_id"/>
+                            </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                Mts ID
+                            </td>
+                            <td>
+                                <input name="params[:mt_id]" style="width: 250px;" id="ts_mt_id"/>
+                            </td>
+                        </tr>
+                       
+                        <tr>
+                            <td id="td_ts_ut_id">
+                                Uts ID
+                            </td>
+                            <td>
+                                <input name="params[:ut_id]" style="width: 250px;" id="ts_ut_id"/>
+                            </td>
+                        </tr>
+
+                    </table>
+                </form>
+            </div>
+
+  <div style="text-align: center; padding: 5px;">
+                <a href="javascript:void(0)" onclick="savetsData()" id="btn-save" icon="icon-save"><text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Update</text></a>
+                <a href="javascript:void(0)" onclick="closetsWindow()" id="btn-cancel" icon="icon-cancel"><text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Cancel</text></a>
+</div>
+</div>
+
+ <div id="upload-window" title="Dialog Upload Packages List " style="width: 350px; height: 220px;">
+            <div style="padding: 20px 20px 40px 80px; text-align:left; ">
+                <form method="post" style='padding-left: 50px;' >
+                         <tr>
+                          <td> Language:
+                           <select id="select_id" style="width:100px;" onchange="setos(this.options[this.options.selectedIndex].value)" >
+                              <option value ="ruby">ruby</option>
+                              <option value ="go">go</option>
+                              <option value="java">java</option>
+                              <option value="baseos">baseos</option>
+                           </select>
+                           </td>
+                           <td>
+                           <select id="select_target" style="width:100px; display:none;">
+                              <option value="ubuntu" selected="selected">ubuntu</option>
+                              <option value="centos">centos</option>
+                           </select>
+                           </td>
+                        </tr>
+ <input type="file" style="width: 250px;"  id="file" onchange="handleFiles(this.files)"/>
+ <input id="filecontent"  type="hidden" name="packagelist" > </input>
+
+                </form>
+            </div>
+            <div style="text-align: center; padding: 5px;">
+                <a href="javascript:void(0)" onclick="savefileData()" id="btn-save" icon="icon-save"><text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Upload</text></a>
+                <a href="javascript:void(0)" onclick="closefileWindow()" id="btn-cancel" icon="icon-cancel"> <text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Cancel</text></a>
+            </div>
+
+</div>
+
+
+    <div id="add-repo-window" title="Dialog Add Repo" style="width: 350px; height: 220px;">
+            <div style="padding: 20px 20px 40px 80px;">
+                <form method="post">
+                    <table>
+                        <tr>
+                            <td>
+                                Name
+                            </td>
+                            <td>
+                                <input name="params[:name]" style="width: 250px;" id="new_repo_name" />
+                            </td>
+                        </tr>
+ 
+                       <tr>
+                            <td>
+                                Version
+                            </td>
+                            <td>
+                                <input name="params[:version]" style="width: 250px;" id="new_repo_version"/>
+                            </td>
+                        </tr>
+
+ 
+                       <tr>
+                            <td>
+                                bugzilla_url
+                            </td>
+                            <td>
+                                <input name="params[:bugzilla_url]" style="width: 250px;" id="new_repo_bugzilla_url"/>
+                            </td>
+                        </tr>
+
+ 
+                       <tr>
+                            <td>
+                                bugzilla_status
+                            </td>
+                            <td>
+                                <select  name="params[:bugzilla_status]" style="width: 250px;"  id="new_repo_bugzilla_status">
+                                <option value ="2">Approved</option>
+                                <option value ="1">Applied</option>
+                                <option value ="0">Not applied</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                         <tr>
+                            <td>
+                                Mts ID
+                            </td>
+                            <td>
+                                <input name="params[:mt_id]" style="width: 250px;" id="new_repo_mt_id"/>
+                            </td>
+                        </tr>
+                       
+                        <tr>
+                            <td>
+                                Uts ID
+                            </td>
+                            <td>
+                                <input name="params[:ut_id]" style="width: 250px;" id="new_repo_ut_id"/>
+                            </td>
+                        </tr>
+
+                    </table>
+                </form>
+            </div>
+
+  <div style="text-align: center; padding: 5px;">
+                <a href="javascript:void(0)" onclick="saverepoData()" id="btn-save" icon="icon-save"><text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Save</text></a>
+                <a href="javascript:void(0)" onclick="closerepoWindow()" id="btn-cancel" icon="icon-cancel"><text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Cancel</text></a>
+</div>
+</div>
+
+<!--
+ <div id="upload-window" title="Dialog Upload Packages List " style="width: 350px; height: 220px;">
+            <div style="padding: 20px 20px 40px 80px;">
+                <form method="post"   >
+                         <tr>
+                           <select id="select_id" style="width:100px;">
+                              <option value ="ruby">ruby</option>
+                              <option value ="go">go</option>
+                              <option value="java">java</option>
+                              <option value="baseos">baseos</option>
+                           </select>
+                        </tr>
+ <input type="file" style="width: 250px;"  id="file" onchange="handleFiles(this.files)"/>
+ <input id="filecontent"  type="hidden" name="packagelist" > </input>
+
+                </form>
+            </div>
+            <div style="text-align: center; padding: 5px;">
+                <a href="javascript:void(0)" onclick="savefileData()" id="btn-save" icon="icon-save"><text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Upload</text></a>
+                <a href="javascript:void(0)" onclick="closefileWindow()" id="btn-cancel" icon="icon-cancel"> <text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Cancel</text></a>
+</div>
+</div>
+-->
+
+    <div id="scotzilla-window" title="File Uts" style="width: 350px; height: 168px;">
+            <div style="padding: 20px 20px 10px 80px;">
+                <form method="post">
+<table>
+<tr>Please use your Scotzilla Account to File Uts.</tr>
+<tr>
+<td>User Name</td>
+<td>
+   <input type="text" size="20" name="username" id="username">
+</td>
+</tr>
+<tr>
+<td>Password</td>
+<td>
+   <input type="password" size="20" name="password" id="password">
+</td>
+</tr>
+</table>
+                </form>
+            </div>
+            <div style="text-align: center; padding: 5px;">
+                <a href="javascript:void(0)" onclick="fileUtsData()" id="btn-save" icon="icon-save"> <text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>File Uts</text></a>
+                <a href="javascript:void(0)" onclick="closeutWindow()" id="btn-cancel" icon="icon-cancel"> <text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Cancel</text></a>
+            </div>
+</div>
+
+
+
+
+<div id="update-product-window" title="Dialog update product" style="width: 350px; height: 220px;">
+            <div style="padding: 20px 20px 40px 80px;">
+                <form method="post">
+                    <table>
+                        <tr>
+                            <td>
+                                Name
+                            </td>
+                            <td>
+                                <input name="params[:name]" style="width: 250px;"  required="true"  id="update_name" />
+                            </td>
+                        </tr>
+ 
+                       <tr>
+                            <td>
+                                Version
+                            </td>
+                            <td>
+                                <input name="params[:version]" style="width: 250px;" required="true"  id="update_version"/>
+                            </td>
+                        </tr>
+
+ 
+                       <tr>
+                            <td>
+                                bugzilla_url
+                            </td>
+                            <td>
+                                <input name="params[:bugzilla_url]" style="width: 250px;" id="update_bugzilla_url"/>
+                            </td>
+                        </tr>
+
+ 
+                       <tr>
+                            <td>
+                                bugzilla_status
+                            </td>
+                            <td>
+                                <select  name="params[:bugzilla_status]" style="width: 250px;"  id="update_bugzilla_status">
+                                <option value ="2">Approved</option>
+                                <option value ="1">Applied</option>
+                                <option value ="0">Not applied</option>
+                                </select>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                release_date
+                            </td>
+                            <td>
+                                <input id="update_release_date" name="params[:release_date]" type="text" style="width: 250px;" class="easyui-datebox" required="true"  />
+                            </td>
+                        </tr>
+
+
+                         <tr>
+                            <td>
+                                description
+                            </td>
+                            <td>
+                                <input name="params[:description]" style="width: 250px;" id="update_description"/>
+                            </td>
+                        </tr>
+
+                    </table>
+                </form>
+            </div>
+            <div style="text-align: center; padding: 5px;">
+                <a href="javascript:void(0)" onclick="saveData('update')" id="btn-save" icon="icon-save"> <text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Save</text></a>
+                <a href="javascript:void(0)" onclick="closeupdateWindow()" id="btn-cancel" icon="icon-cancel"> <text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Cancel</text></a>
+            </div>
+        </div>
+
+
+
+<div id="eidt-window" title="Dialog Add" style="width: 350px; height: 220px;">
+            <div style="padding: 20px 20px 40px 80px;">
+                <form method="post">
+                    <table>
+                        <tr>
+                            <td>
+                                Name
+                            </td>
+                            <td>
+                                <input name="params[:name]" style="width: 250px;"  required="true"  id="new_name" />
+                            </td>
+                        </tr>
+ 
+                       <tr>
+                            <td>
+                                Version
+                            </td>
+                            <td>
+                                <input name="params[:version]" style="width: 250px;" required="true"  id="new_version"/>
+                            </td>
+                        </tr>
+
+ 
+                       <tr>
+                            <td>
+                                bugzilla_url
+                            </td>
+                            <td>
+                                <input name="params[:bugzilla_url]" style="width: 250px;" id="new_bugzilla_url"/>
+                            </td>
+                        </tr>
+
+ 
+                       <tr>
+                            <td>
+                                bugzilla_status
+                            </td>
+                            <td>
+                                <select  name="params[:bugzilla_status]" style="width: 250px;"  id="new_bugzilla_status">
+                                <option value ="2">Approved</option>
+                                <option value ="1">Applied</option>
+                                <option value ="0">Not applied</option>
+                                </select>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                release_date
+                            </td>
+                            <td>
+                                <input id="new_release_date" name="params[:release_date]" type="text" style="width: 250px;" class="easyui-datebox" required="true"  />
+                            </td>
+                        </tr>
+
+
+                         <tr>
+                            <td>
+                                description
+                            </td>
+                            <td>
+                                <input name="params[:description]" style="width: 250px;" id="new_description"/>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div style="text-align: center; padding: 5px;">
+                <a href="javascript:void(0)" onclick="saveData('create')" id="btn-save" icon="icon-save"> <text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Save</text></a>
+                <a href="javascript:void(0)" onclick="closeWindow()" id="btn-cancel" icon="icon-cancel"> <text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Cancel</text></a>
+            </div>
+        </div>
+
+
+       <div id="add-baseos-window" title="Dialog Add BaseOS" style="width: 350px; height: 220px;">
+            <div style="padding: 20px 20px 40px 80px;">
+                <form method="post">
+                    <table>
+                        <tr>
+                            <td>
+                                Name
+                            </td>
+                            <td>
+                                <input name="params[:name]" style="width: 250px;" id="new_baseos_name" />
+                            </td>
+                        </tr>
+ 
+                       <tr>
+                            <td>
+                                Version
+                            </td>
+                            <td>
+                                <input name="params[:version]" style="width: 250px;" id="new_baseos_version"/>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div style="text-align: center; padding: 5px;">
+                <a href="javascript:void(0)" onclick="savebaseosData()" id="btn-save" icon="icon-save"> <text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Save</text></a>
+                <a href="javascript:void(0)" onclick="closebaseosWindow()" id="btn-cancel" icon="icon-cancel"> <text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Cancel</text></a>
+            </div>
+</div>
+
+<div id="update-baseos-window" title="Dialog Update BaseOS" style="width: 350px; height: 220px;">
+            <div style="padding: 20px 20px 40px 80px;">
+                <form method="post">
+                    <table>
+                        <tr>
+                            <td>
+                                Name
+                            </td>
+                            <td>
+                                <input name="params[:name]" style="width: 250px;" id="update_baseos_name" />
+                            </td>
+                        </tr>
+ 
+                       <tr>
+                            <td>
+                                Version
+                            </td>
+                            <td>
+                                <input name="params[:version]" style="width: 250px;" id="update_baseos_version"/>
+                            </td>
+                        </tr>
+
+                       <tr>
+                            <td>
+                                cf_tracker
+                            </td>
+                            <td>
+                                <select  name="params[:ct_status]" style="width: 250px;"  id="update_ct_status">
+                                <option value ="2">Approved</option>
+                                <option value ="1">Applied</option>
+                                <option value ="0">Not applied</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                    </table>
+                </form>
+            </div>
+            <div style="text-align: center; padding: 5px;">
+                <a href="javascript:void(0)" onclick="savebaseosData()" id="btn-save" icon="icon-save"><text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Save</text></a>
+                <a href="javascript:void(0)" onclick="closeupdatebaseosWindow()" id="btn-cancel" icon="icon-cancel"><text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Cancel</text></a>
+            </div>
+</div>
+
+<div id="delete-window" title="Dialog Delete" style="width: 350px; height: 220px;">
+            <div style="padding: 20px 20px 40px 0px;">
+             <text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;width:336px;align:left;' >Do you really want to delete this component?</text>
+            </div>
+            <div style="text-align: center; padding: 5px;">
+                <a href="javascript:void(0)" onclick="savedeleteData()" id="btn-save" icon="icon-save"><text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Delete</text></a>
+                <a href="javascript:void(0)" onclick="closedeleteWindow()" id="btn-cancel" icon="icon-cancel"><text class='highcharts-title'  style='color:#274b6d;font-size:16px;fill:#274b6d;'>Cancel</a></text>
+            </div>
+</div>
+</body>
+</html>
