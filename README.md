@@ -1,7 +1,7 @@
 Pcf_Tracker
 =============
 
-This is for vmware shanghai office's PCF tracking system.
+This is a PCF tracking system for vmware shanghai office.
 
 
 Installation
