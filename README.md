@@ -11,7 +11,7 @@ Clone the repository git clone git@github.com/rogerluo410/pcf_tracker
 
 Install Dependencies bundle install
 
-Start the Server
+Start the Server with 'rails s'
 
 
 ## Usage
