@@ -1,0 +1,14 @@
+---
+applications:
+- name: pcf_tracker
+  command: bundle exec rake db:create db:migrate && rails server -e production -p $PORT
+  memory: 512M
+  instances: 1
+  host: pcf_tracker-${random-word}
+  domain: cfapps.io
+  path: .
+  services:
+    pcf_trackerdb:
+      label: elephantsql
+      provider: elephantsql
+      plan: turtle
