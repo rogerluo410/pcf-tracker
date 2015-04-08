@@ -20,10 +20,10 @@ class ContainerPackage < ActiveRecord::Base
   belongs_to :container, :class_name => 'Container',:foreign_key => 'container_id'
 
   scope :not_deleted, where(:deleted => NOT_DELETED)
-  scope :find_not_deleted,->(id) { where("id=#{id} and deleted = false ")}
-  scope :find_by_name, ->(name,version,container_id) { where("name='#{name}' and version = '#{version}' and container_id = #{container_id} and deleted = false") }
-  scope :all_notdeleted_by_containerid, ->(container_id) { where("container_id=#{container_id} and deleted = false").order('name,id desc') }
-  scope :get_missing_mt,->(container_id) { where("container_id=#{container_id} and deleted = false and mt_id = 0 " ) }
+  scope :find_not_deleted,->(id) { where("id = ? and deleted = false ", id)}
+  scope :find_by_name, ->(name,version,container_id) { where("name = ? and version = ? and container_id = ? and deleted = false",name,version,container_id) }
+  scope :all_notdeleted_by_containerid, ->(container_id) { where("container_id = ? and deleted = false",container_id).order('name,id desc') }
+  scope :get_missing_mt,->(container_id) { where("container_id = ? and deleted = false and mt_id = 0 " , container_id) }
   
 
 

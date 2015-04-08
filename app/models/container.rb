@@ -22,7 +22,7 @@ class Container < ActiveRecord::Base
   belongs_to :product, :class_name => 'Product',:foreign_key => 'product_id'
 
   scope :not_deleted, where(:deleted => NOT_DELETED)
-  scope :find_not_deleted,->(id) { where("id=#{id} and deleted = false ")}
-  scope :all_notdeleted_by_productid, ->(product_id) { where("product_id=#{product_id} and deleted = false") }
+  scope :find_not_deleted,->(id) { where("id = ? and deleted = false ", id)}
+  scope :all_notdeleted_by_productid, ->(product_id) { where("product_id = ? and deleted = false",product_id) }
 
 end
